@@ -9,6 +9,7 @@ import os
 APPID = os.environ.get('appid')
 SECRET = os.environ.get('secret')
 TOKEN = os.environ.get('token')
+HOST = os.environ.get('wechat_host')
 
 # corns
 CORN_TYPE = ['BTC', 'ETH']

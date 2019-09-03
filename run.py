@@ -3,7 +3,7 @@ Author  : Alan
 Date    : 2019/8/28 10:39
 Email   : vagaab@foxmail.com
 """
-from config import APPID, SECRET, TOKEN
+from config import APPID, SECRET, TOKEN, HOST
 from digit_wallet import Wallet
 from reply import Msg
 
@@ -89,4 +89,4 @@ def auth():
 
 
 if __name__ == '__main__':
-    app.run(host='45.32.33.11', port=80)
+    app.run(host=HOST, port=80)
