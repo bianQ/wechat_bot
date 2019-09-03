@@ -54,7 +54,6 @@ ERROR = '输入错误！'
 INFO = '请输入要执行的操作(如：查询)：'
 MENU = {
     '查询': '',
-    '我的设置': '',
-    '更新设置': {k: list(OPERATE_DICT.keys()) for k in CORN_TYPE},
+    '设置': {k: list(OPERATE_DICT.keys()) for k in CORN_TYPE},
 }
 MENU_REFRESH_INTERVAL = 60

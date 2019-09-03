@@ -120,10 +120,6 @@ class Msg:
             self.corn_type = content
         if content == '查询':
             return self.wallet.info
-        elif content == '我的设置':
-            for corn in self.wallet.corns.values():
-                text_list.append('\n'.join([f'{k}: {v}' for k, v in corn.__dict__.items() if v]))
-            return divide_line.join(text_list)
         elif content == '主页':
             self.menu.reload()
         elif content == '上一页':
