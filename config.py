@@ -30,7 +30,7 @@ FROM_ADDRESS = '15989490620@163.com'
 TO_ADDRESS = 'vagaab@foxmail.com'
 PASSWORD = os.environ.get('password')
 SMTP = 'smtp.163.com'
-PORT = 25
+PORT = 465
 
 # menu
 CORN_DICT = {

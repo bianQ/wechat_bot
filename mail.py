@@ -18,7 +18,10 @@ class Mail:
         self.from_addr = FROM_ADDRESS
         self.password = PASSWORD
         self.to_addr = TO_ADDRESS
-        self.server = smtplib.SMTP(SMTP, PORT)
+        self.server = smtplib.SMTP_SSL(SMTP, PORT)
+
+        self.server.set_debuglevel(1)
+        self.server.login(self.from_addr, self.password)
 
     def _format_addr(self, s):
         name, addr = parseaddr(s)
@@ -31,8 +34,6 @@ class Mail:
         msg['To'] = self._format_addr('Python <%s>' % self.to_addr)  # to_addr 为str 多个邮箱用，隔开
         msg['Subject'] = Header('来自Python的测试邮件', 'utf-8').encode()
 
-        self.server.set_debuglevel(1)
-        self.server.login(self.from_addr, self.password)
         self.server.sendmail(self.from_addr, [self.to_addr], msg.as_string())
 
     def quit(self):
