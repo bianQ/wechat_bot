@@ -85,7 +85,7 @@ def auth():
         # reply_content = '这项目，我王多鱼投了'
 
         reply_content = msg.create_msg(to_user, from_user, content)
-        return msg.format_msg(to_user, from_user, reply_content)
+        return reply_content
 
 
 if __name__ == '__main__':

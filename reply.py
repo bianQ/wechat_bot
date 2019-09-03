@@ -119,7 +119,7 @@ class Msg:
         if content in CORN_TYPE:
             self.corn_type = content
         if content == '查询':
-            return ''
+            return self.wallet.info
         elif content == '我的设置':
             for corn in self.wallet.corns.values():
                 text_list.append('\n'.join([f'{k}: {v}' for k, v in corn.__dict__.items() if v]))
@@ -134,10 +134,3 @@ class Msg:
 
     def create_msg(self, to_user, from_user, content):
         return self.format_msg(to_user, from_user, self.reply_text(content))
-
-    def refresh_menu(self):
-        for _ in range(MENU_REFRESH_INTERVAL):
-            if self.menu == MENU:
-                break
-            time.sleep(1)
-        self.menu = MENU
