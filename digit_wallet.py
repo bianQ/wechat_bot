@@ -4,7 +4,8 @@ Date    : 2019/8/28 16:03
 Email   : vagaab@foxmail.com
 """
 
-from config import URL, HEADER, INTERVAL, CORN_TYPE, OPERATE_DICT
+from config import URL, HEADER, INTERVAL, CORN_TYPE, CORN_DICT, EN_TO_ZH_DICT, WARN_INTERVAL
+from mail import Mail
 
 import requests
 
@@ -26,7 +27,7 @@ class Corn:
     @property
     def is_notice(self):
         if self.buy:
-            if abs(self.current - self.buy) >= self.percent:
+            if abs(self.current - self.buy) / self.buy >= self.percent:
                 return True
             return False
         if self.down == 0 or self.up == 0:
@@ -38,8 +39,15 @@ class Corn:
         return False
 
     @property
+    def info(self):
+        text = '\n'.join([f'{EN_TO_ZH_DICT[k]}：{v}' for k, v in self.__dict__.items() if v])
+        if self.profit:
+            text += f'\n收益：{self.profit}\n收益率：%.4f' % (self.profit / self.total_price)
+        return text
+
+    @property
     def profit(self):
-        if self.buy == 0:
+        if self.buy == 0 or self.total_price == 0:
             return None
         corn_num = self.total_price / self.buy
         return round((self.current - self.buy) * corn_num, 2)
@@ -51,7 +59,7 @@ class Corn:
         return '%.2f' % ((self.current - self.buy) / self.buy * 100) + '%'
 
     def update(self, key, value):
-        setattr(self, key, value)
+        setattr(self, key, float(value))
 
 
 class Wallet:
@@ -62,14 +70,33 @@ class Wallet:
         self.corns = {}
         # stop/active
         self.status = 'stop'
+        self.warn_interval = WARN_INTERVAL
+        self.warn_time = None
+        self.mail = Mail()
         self.session.headers.update(HEADER)
+
+        self.load()
 
     def refresh(self):
         response = self.session.get(URL)
         data = response.json()['data']
+        msg = []
         for corn in self.corns.values():
-            corn_data = [i for i in data if i['symbol'] == OPERATE_DICT.get(corn.corn_type)][0]
-            corn.current = corn_data['close']
+            corn_data = [i for i in data if i['symbol'] == CORN_DICT.get(corn.corn_type)][0]
+            corn.update('current', corn_data['close'])
+            if corn.is_notice:
+                msg.append(corn.info)
+        self.warning(msg)
+
+    def warning(self, msg):
+        if msg:
+            now = int(time.time())
+            if self.warn_time is not None and self.warn_time + self.warn_interval > now:
+                return
+            divide_line = '\n-----------------------------\n'
+            text = divide_line.join(msg)
+            self.warn_time = now
+            self.mail.send(text)
 
     def auto_refresh(self):
         while True:
@@ -81,11 +108,11 @@ class Wallet:
     def load(self):
         self.corns = {corn_type: Corn(corn_type) for corn_type in self.corn_types}
         self.active()
-        self.status = 'active'
 
     def active(self):
         t = Thread(target=self.auto_refresh)
         t.start()
+        self.status = 'active'
 
     def stop(self):
         self.status = 'stop'
@@ -99,3 +126,8 @@ class Wallet:
     @property
     def profit(self):
         return sum([corn.profit for corn in self.corns])
+
+    @property
+    def info(self):
+        divide_line = '\n-----------------------------\n'
+        return divide_line.join([m.info for m in self.corns.values()])

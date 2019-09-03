@@ -6,9 +6,9 @@ Email   : vagaab@foxmail.com
 import os
 
 # wechat
-APPID = os.environ('appid')
-SECRET = os.environ('secret')
-TOKEN = os.environ('token')
+APPID = os.environ.get('appid')
+SECRET = os.environ.get('secret')
+TOKEN = os.environ.get('token')
 
 # corns
 CORN_TYPE = ['BTC', 'ETH']
@@ -24,26 +24,36 @@ URL = 'https://www.huobi.co/-/x/pro/market/overview5'
 INTERVAL = 3
 
 # email
+WARN_INTERVAL = 60 * 10
 FROM_ADDRESS = '15989490620@163.com'
 TO_ADDRESS = 'vagaab@foxmail.com'
-PASSWORD = os.environ('password')
+PASSWORD = os.environ.get('password')
 SMTP = 'smtp.163.com'
 PORT = 25
 
 # menu
+CORN_DICT = {
+    'BTC': 'btcusdt',
+    'ETH': 'ethusdt',
+}
+OPERATE_DICT = {
+    '价格上限': 'up',
+    '价格下限': 'down',
+    '买入单价': 'buy',
+    '当前价格': 'current',
+    '买入总价': 'total_price',
+    '提醒百分比': 'percent'
+}
+EN_TO_ZH_DICT = {
+    'corn_type': '币种',
+    **{v: k for k, v in OPERATE_DICT.items() if k not in ['BTC', 'ETH']},
+    'profit': '收益'
+}
+ERROR = '输入错误！'
 INFO = '请输入要执行的操作(如：查询)：'
 MENU = {
     '查询': '',
     '我的设置': '',
-    '更新设置': {**{k: ['价格上限', '价格下限', '买入单价', '买入总价', '提醒百分比', '重置'] for k in CORN_TYPE}, '重置': ''},
+    '更新设置': {k: list(OPERATE_DICT.keys()) for k in CORN_TYPE},
 }
 MENU_REFRESH_INTERVAL = 60
-OPERATE_DICT = {
-    'BTC': 'btcusdt',
-    'ETH': 'ethusdt',
-    '价格上限': 'up',
-    '价格下限': 'down',
-    '买入单价': 'buy',
-    '买入总价': 'total_price',
-    '提醒百分比': 'percent'
-}

@@ -49,7 +49,6 @@ class Bot:
 app = Flask(__name__)
 app.debug = True
 wallet = Wallet()
-wallet.load()
 msg = Msg(wallet)
 
 
