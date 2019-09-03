@@ -25,6 +25,7 @@ class Mail:
         return formataddr((Header(name, 'utf-8').encode(), addr))
 
     def send(self, content):
+        content = f'<html><hody><p>{content}</p></body></html>'.replace('\n', '<br>')
         msg = MIMEText(content, 'html', 'utf-8')
         msg['From'] = self._format_addr('Python auto-email<%s>' % self.from_addr)
         msg['To'] = self._format_addr('Python <%s>' % self.to_addr)  # to_addr 为str 多个邮箱用，隔开
