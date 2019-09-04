@@ -91,7 +91,8 @@ class Wallet:
     def warning(self, msg):
         if msg:
             now = int(time.time())
-            if self.warn_time is not None and self.warn_time + self.warn_interval > now:
+            warn_time = self.warn_time
+            if warn_time is not None and warn_time + self.warn_interval > now:
                 return
             divide_line = '\n-----------------------------\n'
             text = divide_line.join(msg)

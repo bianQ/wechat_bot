@@ -69,7 +69,8 @@ class Menu:
 
     def time_refresh(self):
         while True:
-            if self.expires is not None and self.now > self.expires:
+            expires = self.expires
+            if expires is not None and self.now > expires:
                 self.reload()
                 time.sleep(2)
 
