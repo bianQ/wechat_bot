@@ -6,6 +6,7 @@ Email   : vagaab@foxmail.com
 
 from config import URL, HEADER, INTERVAL, CORN_TYPE, CORN_DICT, EN_TO_ZH_DICT, WARN_INTERVAL
 from mail import Mail
+from db import DBSession
 
 import requests
 
@@ -15,14 +16,14 @@ from threading import Thread
 
 class Corn:
 
-    def __init__(self, corn_type):
+    def __init__(self, corn_type, current=0, buy=0, down=0, up=0, total_price=0, percent=0.05):
         self.corn_type = corn_type
-        self.current = 0
-        self.buy = 0
-        self.down = 0
-        self.up = 0
-        self.total_price = 0
-        self.percent = 0.05
+        self.current = current
+        self.buy = buy
+        self.down = down
+        self.up = up
+        self.total_price = total_price
+        self.percent = percent
 
     @property
     def is_notice(self):
@@ -64,7 +65,9 @@ class Corn:
 
 class Wallet:
 
-    def __init__(self):
+    def __init__(self, user_id):
+        self.user_id = user_id
+        self.db = DBSession()
         self.session = requests.session()
         self.corn_types = CORN_TYPE
         self.corns = {}
@@ -107,7 +110,9 @@ class Wallet:
             time.sleep(INTERVAL)
 
     def load(self):
-        self.corns = {corn_type: Corn(corn_type) for corn_type in self.corn_types}
+        for corn_type in self.corn_types:
+            corn_info = self.db.query(self.user_id, corn_type)
+            self.corns[corn_type] = Corn(**corn_info)
         self.active()
 
     def active(self):

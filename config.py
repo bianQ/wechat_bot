@@ -5,6 +5,9 @@ Email   : vagaab@foxmail.com
 """
 import os
 
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+
 # wechat
 APPID = os.environ.get('appid')
 SECRET = os.environ.get('secret')
@@ -13,9 +16,6 @@ HOST = os.environ.get('wechat_host')
 
 # corns
 CORN_TYPE = ['BTC', 'ETH']
-# BITCORN_BUY = 0
-# BITCORN_DOWN = 9500
-# BITCORN_UP = 10500
 
 # request
 HEADER = {
@@ -57,3 +57,9 @@ MENU = {
     '设置': {k: list(OPERATE_DICT.keys()) for k in CORN_TYPE},
 }
 MENU_REFRESH_INTERVAL = 60
+
+# database
+DATABASE = {
+    'ENGINE': 'sqlite',
+    'NAME': os.path.join(PROJECT_PATH, 'db.sqlite3')
+}

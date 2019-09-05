@@ -112,6 +112,7 @@ class Msg:
                 return '请输入金额/百分比'
             if content.isdigit():
                 self.wallet.corns.get(self.corn_type).update(OPERATE_DICT[self.corn_info], content)
+                self.wallet.db.update(self.wallet.user_id, self.corn_type, {OPERATE_DICT[self.corn_info]: content})
                 self.menu.reload()
                 return f'{self.corn_type} {self.corn_info} 成功设置为 {content}'
         # 设置参数错误时的返回信息
