@@ -9,10 +9,10 @@ import os
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # wechat
-APPID = os.environ.get('appid')
-SECRET = os.environ.get('secret')
-TOKEN = os.environ.get('token')
-HOST = os.environ.get('wechat_host')
+APPID = os.environ.get('APPID')
+SECRET = os.environ.get('SECRET')
+TOKEN = os.environ.get('TOKEN')
+HOST = os.environ.get('WECHAT_HOST')
 
 # corns
 CORN_TYPE = ['BTC', 'ETH']
@@ -28,7 +28,7 @@ INTERVAL = 3
 WARN_INTERVAL = 60 * 10
 FROM_ADDRESS = '15989490620@163.com'
 TO_ADDRESS = 'vagaab@foxmail.com'
-PASSWORD = os.environ.get('password')
+PASSWORD = os.environ.get('PASSWORD')
 SMTP = 'smtp.163.com'
 PORT = 465
 

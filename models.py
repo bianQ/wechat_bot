@@ -10,7 +10,7 @@ from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
-class User:
+class User(Base):
 
     __tablename__ = 'user'
     user_id = Column(String(30), primary_key=True)

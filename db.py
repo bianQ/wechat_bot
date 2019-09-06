@@ -33,8 +33,10 @@ class DBSession:
         self.session = session()
 
     def query(self, user_id, corn_type):
-        info = self.session.query(User).filter(User.user_id == user_id, User.corn_type == corn_type).one()
-        return {k: v for k, v in info.__dict__.items() if k != '_sa_instance_state'}
+        info = self.session.query(User).filter(User.user_id == user_id, User.corn_type == corn_type)
+        if info.count() == 0:
+            return {'corn_type': corn_type}
+        return {k: v for k, v in info.one().__dict__.items() if k != '_sa_instance_state'}
 
     def update(self, user_id, corn_type, attr):
         try:
