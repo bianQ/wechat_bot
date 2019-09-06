@@ -66,6 +66,7 @@ class Corn:
 class Wallet:
 
     def __init__(self):
+        self.user_id = ''
         self.db = DBSession()
         self.session = requests.session()
         self.corn_types = CORN_TYPE
@@ -112,6 +113,7 @@ class Wallet:
         for corn_type in self.corn_types:
             corn_info = self.db.query(user_id, corn_type)
             self.corns[corn_type] = Corn(**corn_info)
+        self.user_id = user_id
         self.active()
 
     def active(self):
