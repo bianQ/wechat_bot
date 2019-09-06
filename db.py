@@ -35,12 +35,16 @@ class DBSession:
     def query(self, user_id, corn_type):
         info = self.session.query(User).filter(User.user_id == user_id, User.corn_type == corn_type)
         if info.count() == 0:
-            return {'corn_type': corn_type}
+            return None
         return {k: v for k, v in info.one().__dict__.items() if k != '_sa_instance_state'}
 
     def update(self, user_id, corn_type, attr):
         try:
-            self.session.query(User).filter(User.user_id == user_id, User.corn_type == corn_type).update(**attr)
+            info = self.query(user_id, corn_type)
+            if info:
+                self.session.query(User).filter(User.user_id == user_id, User.corn_type == corn_type).update(attr)
+            else:
+                self.session.add(User(user_id=user_id, corn_type=corn_type, **attr))
             self.session.commit()
-        except:
+        except Exception as e:
             self.session.rollback()

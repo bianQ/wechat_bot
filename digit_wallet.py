@@ -111,7 +111,7 @@ class Wallet:
         if self.corns:
             return
         for corn_type in self.corn_types:
-            corn_info = self.db.query(user_id, corn_type)
+            corn_info = self.db.query(user_id, corn_type) or {'corn_type': corn_type}
             self.corns[corn_type] = Corn(**corn_info)
         self.user_id = user_id
         self.active()
