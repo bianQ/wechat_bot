@@ -48,6 +48,8 @@ class Bot:
 
 app = Flask(__name__)
 app.debug = True
+wallet = Wallet()
+msg = Msg(wallet)
 
 
 @app.route('/wx', methods=['GET', 'POST'])
@@ -82,8 +84,7 @@ def auth():
         # msg_id = xml_rec.find('MsgId').text
         # reply_content = '这项目，我王多鱼投了'
 
-        wallet = Wallet(from_user)
-        msg = Msg(wallet)
+        msg.wallet.load(from_user)
         reply_content = msg.create_msg(to_user, from_user, content)
         return reply_content
 

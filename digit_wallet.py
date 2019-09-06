@@ -65,8 +65,7 @@ class Corn:
 
 class Wallet:
 
-    def __init__(self, user_id):
-        self.user_id = user_id
+    def __init__(self):
         self.db = DBSession()
         self.session = requests.session()
         self.corn_types = CORN_TYPE
@@ -77,8 +76,6 @@ class Wallet:
         self.warn_time = None
         self.mail = Mail()
         self.session.headers.update(HEADER)
-
-        self.load()
 
     def refresh(self):
         response = self.session.get(URL)
@@ -109,9 +106,11 @@ class Wallet:
                 break
             time.sleep(INTERVAL)
 
-    def load(self):
+    def load(self, user_id):
+        if self.corns:
+            return
         for corn_type in self.corn_types:
-            corn_info = self.db.query(self.user_id, corn_type)
+            corn_info = self.db.query(user_id, corn_type)
             self.corns[corn_type] = Corn(**corn_info)
         self.active()
 
