@@ -36,7 +36,7 @@ class DBSession:
         info = self.session.query(User).filter(User.user_id == user_id, User.corn_type == corn_type)
         if info.count() == 0:
             return None
-        return {k: v for k, v in info.one().__dict__.items() if k != '_sa_instance_state'}
+        return {k: v for k, v in info.one().__dict__.items() if k not in ['_sa_instance_state', 'user_id']}
 
     def update(self, user_id, corn_type, attr):
         try:
