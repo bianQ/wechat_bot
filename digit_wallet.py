@@ -9,6 +9,7 @@ from mail import Mail
 from db import DBSession
 
 import requests
+from retrying import retry
 
 import time
 from threading import Thread
@@ -78,6 +79,7 @@ class Wallet:
         self.mail = Mail()
         self.session.headers.update(HEADER)
 
+    @retry(wait_random_min=1000, wait_random_max=2000)
     def refresh(self):
         response = self.session.get(URL)
         data = response.json()['data']
