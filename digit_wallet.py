@@ -32,7 +32,7 @@ class Corn:
             if abs(self.current - self.buy) / self.buy >= self.percent:
                 return True
             return False
-        if self.down == 0 or self.up == 0:
+        if self.down == 0 and self.up == 0:
             return False
         if self.down and self.current <= self.down:
             return True
